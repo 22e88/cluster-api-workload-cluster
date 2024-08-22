@@ -6,7 +6,7 @@
     CLUSTER_NAME: teclu1
 
   tasks: 
-    - name: create config yaml for workload cluster object
+    - name: delete workload cluster object from management cluster
       ansible.builtin.shell: kubectl delete cluster "$CLUSTER_NAME" 
 
 
