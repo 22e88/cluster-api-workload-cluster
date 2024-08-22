@@ -1,0 +1,12 @@
+---
+- name: delete workload cluster using the KinD management cluster 
+  hosts: mgmtcp0
+
+  environment:
+    CLUSTER_NAME: teclu1
+
+  tasks: 
+    - name: create config yaml for workload cluster object
+      ansible.builtin.shell: kubectl delete cluster "$CLUSTER_NAME" 
+
+
