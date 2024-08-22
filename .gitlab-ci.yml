@@ -47,13 +47,14 @@ delete-workload-cluster:
   script: 
     - export TOKEN=$CI_MGMT_PROJ_TOKEN
     - curl -L -o ./artifacts.zip -H "PRIVATE-TOKEN:$TOKEN" https://gitlab.com/api/v4/projects/59703914/jobs/artifacts/stage/download\?job\=create-mgmt-cluster
-
+    - unzip artifacts.zip
     - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
     - chmod 0400 ~/.ssh/id_ed25519
     - export ANSIBLE_HOST_KEY_CHECKING=False
     - export ANSIBLE_REMOTE_USER=root
     - cat ansible/inventory/hosts.yaml 
     - ansible -m ping -i ansible/inventory/hosts.yaml all  
+    - ansible-playbook -i ansible/inventory/hosts.yaml ansible/delete-workload-cluster.yml
 
 
 
