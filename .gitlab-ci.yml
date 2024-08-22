@@ -1,0 +1,51 @@
+default:
+  image:
+    name: 22e88/ubu2204-tf-ans:1.2
+  tags:
+    - d1-for-hcloud
+
+stages:
+  - create
+  - update
+  - delete
+
+
+create-workload-cluster:
+  stage: create
+  when: manual
+  script:
+    - export HCLOUD_TOKEN=$CI_HCLOUD_TOKEN_STAGE
+    - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
+    - chmod 0400 ~/.ssh/id_ed25519
+    - export ANSIBLE_HOST_KEY_CHECKING=False
+    - export ANSIBLE_REMOTE_USER=root
+    - cat ansible/inventory/hosts.yaml 
+    - ansible-playbook -i ansible/inventory/hosts.yaml ansible/create-workload-cluster.yml
+
+
+update-workload-cluster:
+  stage: update
+  when: manual
+  script:
+    - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
+    - chmod 0400 ~/.ssh/id_ed25519
+    - export ANSIBLE_HOST_KEY_CHECKING=False
+    - export ANSIBLE_REMOTE_USER=root
+    - cat ansible/inventory/hosts.yaml 
+    - ansible -m ping -i ansible/inventory/hosts.yaml all  
+
+delete-workload-cluster:
+  stage: delete
+  when: manual
+  script: 
+    - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
+    - chmod 0400 ~/.ssh/id_ed25519
+    - export ANSIBLE_HOST_KEY_CHECKING=False
+    - export ANSIBLE_REMOTE_USER=root
+    - cat ansible/inventory/hosts.yaml 
+    - ansible -m ping -i ansible/inventory/hosts.yaml all  
+
+
+
+
+
