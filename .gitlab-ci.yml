@@ -1,6 +1,6 @@
 default:
   image:
-    name: 22e88/ubu2204-tf-ans:1.4
+    name: 22e88/ubu2204-tf-ans:1.5
   tags:
     - d1-for-hcloud
 
