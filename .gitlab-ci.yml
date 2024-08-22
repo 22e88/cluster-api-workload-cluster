@@ -27,7 +27,7 @@ create-workload-cluster:
     - ls -la 
     - cat ansible/inventory/hosts.yaml 
     - ansible -m ping -i ansible/inventory/hosts.yaml all
-    # - ansible-playbook -i ansible/inventory/hosts.yaml ansible/create-workload-cluster.yml
+    - ansible-playbook -i ansible/inventory/hosts.yaml ansible/create-workload-cluster.yml
 
 
 update-workload-cluster:
