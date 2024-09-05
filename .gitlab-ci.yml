@@ -50,7 +50,6 @@ delete-workload-cluster:
     - echo "branchname:" $CI_COMMIT_BRANCH
     - curl -L -o ./artifacts.zip -H "PRIVATE-TOKEN:$TOKEN" "https://gitlab.com/api/v4/projects/59703914/jobs/artifacts/$CI_COMMIT_BRANCH/download\?job\=create-mgmt-cluster"
     - ls -la artifacts.zip
-    - file artifacts.zip
     - unzip artifacts.zip
     - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
     - chmod 0400 ~/.ssh/id_ed25519
