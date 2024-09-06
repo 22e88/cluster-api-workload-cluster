@@ -5,16 +5,16 @@
   # The following environment settings define the base configuration of the 
   # workload cluster to be created:
   # NOTE: HCLOUD_REGION has to be the same as the region of mgmtcp0 
-  environment:
-    HCLOUD_SSH_KEY: noroot@d1
-    CLUSTER_NAME: teclu1
-    HCLOUD_REGION: hel1
-    CONTROL_PLANE_MACHINE_COUNT: 1
-    WORKER_MACHINE_COUNT: 1
-    KUBERNETES_VERSION: 1.29.4
-    HCLOUD_CONTROL_PLANE_MACHINE_TYPE: cpx31
-    HCLOUD_WORKER_MACHINE_TYPE: cpx31
-    SSH_KEY_NAME: noroot@d1 
+  # environment:
+  #   HCLOUD_SSH_KEY: noroot@d1
+  #   CLUSTER_NAME: teclu1
+  #   HCLOUD_REGION: hel1
+  #   CONTROL_PLANE_MACHINE_COUNT: 1
+  #   WORKER_MACHINE_COUNT: 1
+  #   KUBERNETES_VERSION: 1.29.4
+  #   HCLOUD_CONTROL_PLANE_MACHINE_TYPE: cpx31
+  #   HCLOUD_WORKER_MACHINE_TYPE: cpx31
+  #   SSH_KEY_NAME: noroot@d1 
 
   tasks: 
     - name: add Cilium Helm repo on mgmtcp0
@@ -42,12 +42,14 @@
 
     - name: create config yaml for workload cluster object
       # ansible.builtin.shell: clusterctl generate cluster teclu1 > teclu1.yaml    
-      ansible.builtin.shell: "clusterctl generate cluster {{ CLUSTER_NAME }} > {{ CLUSTER_NAME }}.yaml"
+      # ansible.builtin.shell: "clusterctl generate cluster {{ CLUSTER_NAME }} > {{ CLUSTER_NAME }}.yaml"
+      ansible.builtin.shell: "clusterctl generate cluster $CLUSTER_NAME > $CLUSTER_NAME.yaml"
 
     - name: apply workload cluster yaml to KinD management cluster
       ansible.builtin.command:
         # cmd: kubectl apply -f teclu1.yaml
-        cmd: "kubectl apply -f {{ CLUSTER_NAME }}.yaml"
+        # cmd: "kubectl apply -f {{ CLUSTER_NAME }}.yaml"
+        cmd: "kubectl apply -f $CLUSTER_NAME.yaml"
 
     - name: wait for workload cluster objects to be created in HCloud
       ansible.builtin.wait_for:
@@ -57,20 +59,25 @@
     - name: get KUBECONFIG of workload cluster
       ansible.builtin.shell:
         # cmd: clusterctl get kubeconfig teclu1 > teclu1.kubeconfig
-        cmd: "clusterctl get kubeconfig {{ CLUSTER_NAME }} > {{ CLUSTER_NAME }}.kubeconfig"
+        # cmd: "clusterctl get kubeconfig {{ CLUSTER_NAME }} > {{ CLUSTER_NAME }}.kubeconfig"
+        cmd: "clusterctl get kubeconfig $CLUSTER_NAME > $CLUSTER_NAME.kubeconfig"
 
     - name: fix permissions of kubeconfig file to prevent Ansible from error exit
       ansible.builtin.file:
         # path: teclu1.kubeconfig
-        path: "{{ CLUSTER_NAME }}.kubeconfig"
+        # path: "{{ CLUSTER_NAME }}.kubeconfig"
+        path: "$CLUSTER_NAME.kubeconfig"
         mode: '0600'
 
     - name: install Cilium to workload cluster
       ansible.builtin.shell: 
         # cmd: KUBECONFIG=./teclu1.kubeconfig helm upgrade --install cilium cilium/cilium --version 1.14.4 --namespace kube-system -f cluster-api-provider-hetzner/templates/cilium/cilium.yaml
-        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install cilium cilium/cilium --version 1.14.4 --namespace kube-system -f cluster-api-provider-hetzner/templates/cilium/cilium.yaml"
+        # cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install cilium cilium/cilium --version 1.14.4 --namespace kube-system -f cluster-api-provider-hetzner/templates/cilium/cilium.yaml"
+        cmd: "KUBECONFIG=./$CLUSTER_NAME.kubeconfig helm upgrade --install cilium cilium/cilium --version 1.14.4 --namespace kube-system -f cluster-api-provider-hetzner/templates/cilium/cilium.yaml"
 
     - name: install HCloud CCM to workload cluster
       ansible.builtin.shell:
         # cmd: KUBECONFIG=./teclu1.kubeconfig helm upgrade --install ccm syself/ccm-hcloud --version 1.0.11 --namespace kube-system --set secret.name=hetzner --set secret.tokenKeyName=hcloud --set privateNetwork.enabled=false
-        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install ccm syself/ccm-hcloud --version 1.0.11 --namespace kube-system --set secret.name=hetzner --set secret.tokenKeyName=hcloud --set privateNetwork.enabled=false"
+        # cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install ccm syself/ccm-hcloud --version 1.0.11 --namespace kube-system --set secret.name=hetzner --set secret.tokenKeyName=hcloud --set privateNetwork.enabled=false"
+        cmd: "KUBECONFIG=./$CLUSTER_NAME.kubeconfig helm upgrade --install ccm syself/ccm-hcloud --version 1.0.11 --namespace kube-system --set secret.name=hetzner --set secret.tokenKeyName=hcloud --set privateNetwork.enabled=false"
+
