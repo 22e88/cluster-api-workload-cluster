@@ -52,7 +52,7 @@ create-workload-cluster-v1.27.0:
         -e KUBERNETES_VERSION=1.27.0 \
         -e CLUSTER_NAME=my1270cluster \
         -e CONTROL_PLANE_MACHINE_COUNT=1 \
-        -e WORKER_MACHINE_COUNT=1 \
+        -e WORKER_MACHINE_COUNT=2 \
         ansible/create-workload-cluster.yml
 
 update-workload-cluster:
