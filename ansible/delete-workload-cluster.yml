@@ -3,7 +3,7 @@
   hosts: mgmtcp0
 
   environment:
-    CLUSTER_NAME: teclu1
+    CLUSTER_NAME: "{{ CLUSTER_NAME }}"
 
   tasks: 
     - name: delete workload cluster object from management cluster

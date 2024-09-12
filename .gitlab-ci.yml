@@ -66,7 +66,7 @@ update-workload-cluster:
     - cat ansible/inventory/hosts.yaml 
     - ansible -m ping -i ansible/inventory/hosts.yaml all  
 
-delete-workload-cluster:
+delete-workload-cluster-v1.27.0:
   stage: delete
   when: manual
   script: 
@@ -81,7 +81,10 @@ delete-workload-cluster:
     - export ANSIBLE_REMOTE_USER=root
     - cat ansible/inventory/hosts.yaml 
     - ansible -m ping -i ansible/inventory/hosts.yaml all  
-    - ansible-playbook -i ansible/inventory/hosts.yaml ansible/delete-workload-cluster.yml
+    - |
+        ansible-playbook -i ansible/inventory/hosts.yaml \
+          -e CLUSTER_NAME=my1270cluster \
+          ansible/delete-workload-cluster.yml
 
 
 
