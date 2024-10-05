@@ -53,7 +53,7 @@
 
     - name: wait for workload cluster objects to be created in HCloud
       ansible.builtin.wait_for:
-        timeout: 120
+        timeout: 180
       delegate_to: localhost
 
     - name: get KUBECONFIG of workload cluster
