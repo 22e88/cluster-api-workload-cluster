@@ -70,6 +70,7 @@ deploy-ingress-nginx-to-workload-cluster:
     - ls -la 
     - cat ansible/inventory/hosts.yaml 
     - ansible -m ping -i ansible/inventory/hosts.yaml all
+    - ls -la ansible/
     - |
         ansible-playbook -i ansible/inventory/hosts.yaml \ 
         -e HCLOUD_REGION=hel1 \
