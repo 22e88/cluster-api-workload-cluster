@@ -72,10 +72,10 @@ deploy-ingress-nginx-to-workload-cluster:
     - ansible -m ping -i ansible/inventory/hosts.yaml all
     - ls -la ansible/
     - |
-        ansible-playbook -i ansible/inventory/hosts.yaml \ 
+        ansible-playbook -i ansible/inventory/hosts.yaml \
         -e HCLOUD_REGION=hel1 \
         -e CLUSTER_NAME=my1270cluster \
-        ansible/deploy-ingress-nginx.yml 
+        ansible/deploy-ingress-nginx.yml
 
 update-workload-cluster:
   stage: update
