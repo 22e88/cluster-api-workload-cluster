@@ -1,0 +1,31 @@
+---
+- name: deploy ingress-nginx to workload cluster
+  hosts: mgmtcp0
+
+  environment:
+    CLUSTER_NAME: "{{ CLUSTER_NAME }}"
+    HCLOUD_REGION: "{{ HCLOUD_REGION }}"
+
+  tasks:
+    - name: add ingress-nginx Helm repo on mgmtcp0
+      kubernetes.core.helm_repository:
+        name: ingress-nginx
+        repo_url: "https://kubernetes.github.io/ingress-nginx/"
+
+    - name: install ingress-nginx to workload cluster
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install my-ingress-nginx ingress-nginx/ingress-nginx --version 4.11.2"
+
+    - name: add HCloud specific annotation to ingress-controller svc, so that HCCM creates the HCloud loadbalancer automatically
+      kubernetes.core.k8s:
+        kubeconfig: "./{{ CLUSTER_NAME }}.kubeconfig"
+        state: patched
+        kind: service 
+        name: my-ingress-nginx-controller
+        namespace: default
+        definition:
+          metadata:
+            annotations:
+              load-balancer.hetzner.cloud/location: "{{ HCLOUD_REGION }}"
+
+        
