@@ -95,7 +95,7 @@ deploy-cert-manager-and-lets-encrypt-issuers:
     - ls -la ansible/
     - |
         ansible-playbook -i ansible/inventory/hosts.yaml \
-        -e HCLOUD_REGION=hel1 \
+        -e CLUSTER_NAME=my1270cluster \
         -e CERTM_VERSION=v1.15.3 \
         ansible/deploy-cert-manager-and-lets-encrypt-issuers.yml
 
