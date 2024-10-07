@@ -77,6 +77,29 @@ deploy-ingress-nginx-to-workload-cluster:
         -e CLUSTER_NAME=my1270cluster \
         ansible/deploy-ingress-nginx.yml
 
+deploy-cert-manager-and-lets-encrypt-staging-issuer:
+  stage: create
+  when: manual
+  script:
+    - export TOKEN=$CI_MGMT_PROJ_TOKEN
+    - echo "branchname:" $CI_COMMIT_BRANCH
+    - curl -L -o ./artifacts.zip -H "PRIVATE-TOKEN:$TOKEN" https://gitlab.com/api/v4/projects/59703914/jobs/artifacts/$CI_COMMIT_BRANCH/download\?job\=create-mgmt-cluster
+    - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
+    - chmod 0400 ~/.ssh/id_ed25519
+    - export ANSIBLE_HOST_KEY_CHECKING=False
+    - export ANSIBLE_REMOTE_USER=root
+    - unzip artifacts.zip
+    - ls -la 
+    - cat ansible/inventory/hosts.yaml 
+    - ansible -m ping -i ansible/inventory/hosts.yaml all
+    - ls -la ansible/
+    - |
+        ansible-playbook -i ansible/inventory/hosts.yaml \
+        -e HCLOUD_REGION=hel1 \
+        -e CERTM_VERSION=v1.15.3 \
+        ansible/deploy-cert-manager-and-lets-encrypt-issuers.yml
+
+
 update-workload-cluster:
   stage: update
   when: manual
