@@ -5,6 +5,7 @@
   environment:
     CLUSTER_NAME: "{{ CLUSTER_NAME }}"
     CERTM_VERSION: "{{ CERTM_VERSION }}"
+    EMAIL_ADDR: "{{ EMAIL_ADDR }}"
 
   tasks:
     - name: add Jetstack / Cert-Manager Helm repo on mgmtcp0
@@ -19,4 +20,54 @@
               --namespace cert-manager \
               --create-namespace \
               --set crds.enabled=true"
+
+    - name: deploy cert-manager issuer for LetsEncrypt staging
+      kubernetes.core.k8s:
+        kubeconfig: "./{{ CLUSTER_NAME }}.kubeconfig"
+        state: present
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-staging
+            namespace: default
+          spec:
+            acme:
+              # The ACME server URL
+              server: https://acme-staging-v02.api.letsencrypt.org/directory
+              # Email address used for ACME registration
+              email: "{{ EMAIL_ADDR }}"
+              # Name of a secret used to store the ACME account private key
+              privateKeySecretRef:
+                name: letsencrypt-staging
+              # Enable the HTTP-01 challenge provider
+              solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
+
+    - name: deploy cert-manager issuer for LetsEncrypt production
+      kubernetes.core.k8s:
+        kubeconfig: "./{{ CLUSTER_NAME }}.kubeconfig"
+        state: present
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-prod
+            namespace: default
+          spec:
+            acme:
+              # The ACME server URL
+              server: https://acme-v02.api.letsencrypt.org/directory
+              # Email address used for ACME registration
+              email: "{{ EMAIL_ADDR }}"
+              # Name of a secret used to store the ACME account private key
+              privateKeySecretRef:
+                name: letsencrypt-prod
+              # Enable the HTTP-01 challenge provider
+              solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
 

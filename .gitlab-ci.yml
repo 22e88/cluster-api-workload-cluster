@@ -97,6 +97,7 @@ deploy-cert-manager-and-lets-encrypt-issuers:
         ansible-playbook -i ansible/inventory/hosts.yaml \
         -e CLUSTER_NAME=my1270cluster \
         -e CERTM_VERSION=v1.15.3 \
+        -e EMAIL_ADDR=5822@mailbox.org
         ansible/deploy-cert-manager-and-lets-encrypt-issuers.yml
 
 
