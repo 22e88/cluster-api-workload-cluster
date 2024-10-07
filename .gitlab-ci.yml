@@ -77,7 +77,7 @@ deploy-ingress-nginx-to-workload-cluster:
         -e CLUSTER_NAME=my1270cluster \
         ansible/deploy-ingress-nginx.yml
 
-deploy-cert-manager-and-lets-encrypt-staging-issuer:
+deploy-cert-manager-and-lets-encrypt-issuers:
   stage: create
   when: manual
   script:
