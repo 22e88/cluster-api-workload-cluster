@@ -25,4 +25,28 @@
         cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
               kubectl create ingress blue \
               --rule='blue.fluentsystems.org/=blue:8001,tls=fluentsystems-blue' \
+              --class='nginx' \
               --annotation='cert-manager.io/issuer=letsencrypt-staging'"
+
+    - name: create deployment 'red' on workload cluster
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
+              kubectl create deployment red \
+              --image 22e88/red-site:1.0 \
+              --replicas 3"
+
+    - name: expose deployment 'red' aka create k8s svc for it 
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
+              kubectl expose deployment red \
+              --port 8002 \
+              --target-port 80"
+
+    - name: create ingress resource and LetsEncrypt stuff for 'red' 
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
+              kubectl create ingress red \
+              --rule='red.fluentsystems.org/=red:8002,tls=fluentsystems-red' \
+              --class='nginx' \
+              --annotation='cert-manager.io/issuer=letsencrypt-staging'"
+
