@@ -1,0 +1,28 @@
+---
+- name: deploy test workloads to workload cluster
+  hosts: mgmtcp0
+
+  environment:
+    CLUSTER_NAME: "{{ CLUSTER_NAME }}"
+
+  tasks:
+    - name: create deployment 'blue' on workload cluster
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
+              kubectl create deployment blue \
+              --image 22e88/blue-site:1.0 \
+              --replicas 3"
+
+    - name: expose deployment 'blue' aka create k8s svc for it 
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
+              kubectl expose deployment blue \
+              --port 8001 \
+              --target-port 80"
+
+    - name: create ingress resource and LetsEncrypt stuff for 'blue' 
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig \
+              kubectl create ingress blue \
+              --rule='blue.fluentsystems.org=blue:8001,tls=fluentsystems-blue' \
+              --annotation='cert-manager.io/issuer=letsencrypt-staging'"
