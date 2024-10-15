@@ -45,7 +45,7 @@ create-workload-cluster-v1.27.0:
     - |
         ansible-playbook -i ansible/inventory/hosts.yaml \
         -e HCLOUD_CONTROL_PLANE_MACHINE_TYPE=cpx31 \
-        -e HCLOUD_REGION=hel1 \
+        -e HCLOUD_REGION=fsn1 \
         -e HCLOUD_SSH_KEY=noroot@d1 \
         -e SSH_KEY_NAME=noroot@d1 \
         -e HCLOUD_WORKER_MACHINE_TYPE=cpx31 \
@@ -73,7 +73,7 @@ deploy-ingress-nginx-to-workload-cluster:
     - ls -la ansible/
     - |
         ansible-playbook -i ansible/inventory/hosts.yaml \
-        -e HCLOUD_REGION=hel1 \
+        -e HCLOUD_REGION=fsn1 \
         -e CLUSTER_NAME=my1270cluster \
         ansible/deploy-ingress-nginx.yml
 
