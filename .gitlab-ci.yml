@@ -27,7 +27,7 @@ create-workload-cluster:
     - ansible -m ping -i ansible/inventory/hosts.yaml all
     - ansible-playbook -i ansible/inventory/hosts.yaml ansible/create-workload-cluster.yml
 
-create-workload-cluster-v1.27.0:
+0_create-workload-cluster-v1.27.0:
   stage: create
   when: manual
   script:
@@ -55,7 +55,7 @@ create-workload-cluster-v1.27.0:
         -e WORKER_MACHINE_COUNT=2 \
         ansible/create-workload-cluster.yml
 
-deploy-ingress-nginx-to-workload-cluster:
+1_deploy-ingress-nginx-to-workload-cluster:
   stage: create
   when: manual
   script:
@@ -77,7 +77,7 @@ deploy-ingress-nginx-to-workload-cluster:
         -e CLUSTER_NAME=my1270cluster \
         ansible/deploy-ingress-nginx.yml
 
-deploy-cert-manager-and-lets-encrypt-issuers:
+2_deploy-cert-manager-and-lets-encrypt-issuers:
   stage: create
   when: manual
   script:
@@ -100,7 +100,7 @@ deploy-cert-manager-and-lets-encrypt-issuers:
         -e EMAIL_ADDR=5822@mailbox.org \
         ansible/deploy-cert-manager-and-lets-encrypt-issuers.yml
 
-deploy-test-workloads:
+3_deploy-test-workloads:
   stage: create
   when: manual
   script:
