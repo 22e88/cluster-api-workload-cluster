@@ -69,3 +69,17 @@
       ansible.builtin.shell:
         cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install ccm syself/ccm-hcloud --version 1.0.11 --namespace kube-system --set secret.name=hetzner --set secret.tokenKeyName=hcloud --set privateNetwork.enabled=false"
 
+    - name: copy config file with additional values for HCloud CSI helm chart to mgmtcp0
+      ansible.builtin.copy:
+        src: ansible/csi-values.yaml
+        dest: /root/
+        force: true
+
+    - name: install HCloud CSI helm chart to workload cluster
+      ansible.builtin.shell:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install csi syself/csi-hcloud --version 0.2.0 --namespace kube-system --values csi-values.yaml" 
+
+    - name: insert HCLOUD_TOKEN of target project as secret into the workload cluster to enable automatic CSI operations
+      ansible.builtin.command:
+        cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig kubectl create secret generic hcloud --from-literal=token="{{ HCLOUD_TOKEN }}"
+
