@@ -6,6 +6,7 @@
   # workload cluster to be created:
   # NOTE: HCLOUD_REGION has to be the same as the region of mgmtcp0 
   environment:
+    HCLOUD_TOKEN: "{{ HCLOUD_TOKEN }}"
     HCLOUD_SSH_KEY: "{{ HCLOUD_SSH_KEY }}"
     CLUSTER_NAME: "{{ CLUSTER_NAME }}"
     HCLOUD_REGION: "{{ HCLOUD_REGION }}"

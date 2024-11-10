@@ -32,6 +32,7 @@ create-workload-cluster:
   when: manual
   script:
     - export TOKEN=$CI_MGMT_PROJ_TOKEN
+    - export HCLOUD_TOKEN=$CI_HCLOUD_TOKEN_DEV
     - echo "branchname:" $CI_COMMIT_BRANCH
     - curl -L -o ./artifacts.zip -H "PRIVATE-TOKEN:$TOKEN" https://gitlab.com/api/v4/projects/59703914/jobs/artifacts/$CI_COMMIT_BRANCH/download\?job\=create-mgmt-cluster
     - cp $CI_BETA_PRIV_KEY ~/.ssh/id_ed25519
@@ -44,6 +45,7 @@ create-workload-cluster:
     - ansible -m ping -i ansible/inventory/hosts.yaml all
     - |
         ansible-playbook -i ansible/inventory/hosts.yaml \
+        -e HCLOUD_TOKEN="${HCLOUD_TOKEN}" \
         -e HCLOUD_CONTROL_PLANE_MACHINE_TYPE=cpx31 \
         -e HCLOUD_REGION=nbg1 \
         -e HCLOUD_SSH_KEY=noroot@d1 \
