@@ -53,7 +53,7 @@ create-workload-cluster:
         -e CLUSTER_NAME=my1294cluster \
         -e CONTROL_PLANE_MACHINE_COUNT=1 \
         -e WORKER_MACHINE_COUNT=2 \
-        --tags=TEST ansible/create-workload-cluster.yml
+         ansible/create-workload-cluster.yml
 
 1_deploy-ingress-nginx-to-workload-cluster:
   stage: create

@@ -76,8 +76,6 @@
         src: csi-values.yaml
         dest: /root/
         force: true
-      tags: 
-        - TEST
 
     - name: install HCloud CSI helm chart to workload cluster
       ansible.builtin.shell:
