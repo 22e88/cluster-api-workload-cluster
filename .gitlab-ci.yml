@@ -27,7 +27,7 @@ create-workload-cluster:
     - ansible -m ping -i ansible/inventory/hosts.yaml all
     - ansible-playbook -i ansible/inventory/hosts.yaml ansible/create-workload-cluster.yml
 
-0_create-workload-cluster-v1.27.0:
+0_create-workload-cluster-v1.29.4:
   stage: create
   when: manual
   script:
@@ -49,7 +49,7 @@ create-workload-cluster:
         -e HCLOUD_SSH_KEY=noroot@d1 \
         -e SSH_KEY_NAME=noroot@d1 \
         -e HCLOUD_WORKER_MACHINE_TYPE=cpx31 \
-        -e KUBERNETES_VERSION=1.27.0 \
+        -e KUBERNETES_VERSION=1.29.4 \
         -e CLUSTER_NAME=my1270cluster \
         -e CONTROL_PLANE_MACHINE_COUNT=1 \
         -e WORKER_MACHINE_COUNT=2 \

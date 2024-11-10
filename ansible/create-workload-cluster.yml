@@ -61,6 +61,8 @@
         path: "{{ CLUSTER_NAME }}.kubeconfig"
         mode: '0600'
 
+    # point where error shows up 
+      
     - name: install Cilium to workload cluster
       ansible.builtin.shell: 
         cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install cilium cilium/cilium --version 1.14.4 --namespace kube-system -f cluster-api-provider-hetzner/templates/cilium/cilium.yaml"
