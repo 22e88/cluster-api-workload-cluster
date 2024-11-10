@@ -50,7 +50,7 @@ create-workload-cluster:
         -e SSH_KEY_NAME=noroot@d1 \
         -e HCLOUD_WORKER_MACHINE_TYPE=cpx31 \
         -e KUBERNETES_VERSION=1.29.4 \
-        -e CLUSTER_NAME=my1270cluster \
+        -e CLUSTER_NAME=my1294cluster \
         -e CONTROL_PLANE_MACHINE_COUNT=1 \
         -e WORKER_MACHINE_COUNT=2 \
         ansible/create-workload-cluster.yml
