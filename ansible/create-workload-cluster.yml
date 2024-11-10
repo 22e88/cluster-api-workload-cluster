@@ -83,6 +83,6 @@
         cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig helm upgrade --install csi syself/csi-hcloud --version 0.2.0 --namespace kube-system --values csi-values.yaml" 
 
     - name: insert HCLOUD_TOKEN of target project as secret into the workload cluster to enable automatic CSI operations
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: "KUBECONFIG=./{{ CLUSTER_NAME }}.kubeconfig kubectl create secret generic hcloud --from-literal=token={{ HCLOUD_TOKEN }}"
 
