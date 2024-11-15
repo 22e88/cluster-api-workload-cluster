@@ -76,7 +76,7 @@ create-workload-cluster:
     - |
         ansible-playbook -i ansible/inventory/hosts.yaml \
         -e HCLOUD_REGION=nbg1 \
-        -e CLUSTER_NAME=my1270cluster \
+        -e CLUSTER_NAME=my1294cluster \
         ansible/deploy-ingress-nginx.yml
 
 2_deploy-cert-manager-and-lets-encrypt-issuers:
